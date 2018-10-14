@@ -31,11 +31,10 @@
 
 #include "extproc/js_job.hpp"
 
-// TODO(grandquista)
-// static int rduk_exec_timeout_check(void *user_data);
-//
-// #define DUK_USE_EXEC_TIMEOUT_CHECK(user_data) rduk_exec_timeout_check(user_data)
-// #define DUK_USE_INTERRUPT_COUNTER
+static int rduk_exec_timeout_check(void *user_data);
+
+#define DUK_USE_EXEC_TIMEOUT_CHECK(user_data) rduk_exec_timeout_check(user_data)
+#define DUK_USE_INTERRUPT_COUNTER
 
 #include <duktape.h>
 
@@ -529,4 +528,8 @@ static ql::datum_t js_to_datum(duk_context *ctx,
                         const ql::configured_limits_t &limits,
                         std::string *err_out) {
     return js_make_datum(ctx, TO_JSON_RECURSION_LIMIT, limits, err_out);
+}
+
+static int rduk_exec_timeout_check(void *user_data) {
+    return 0;
 }
